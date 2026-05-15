@@ -45,7 +45,7 @@ export default function App() {
         <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />
         <Route path="/habits" element={<ProtectedRoute><Habits /></ProtectedRoute>} />
         <Route path="/expenses" element={<ProtectedRoute><Expenses /></ProtectedRoute>} />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
   );

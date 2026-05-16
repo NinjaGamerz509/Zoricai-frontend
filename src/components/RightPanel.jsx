@@ -18,7 +18,7 @@ export default function RightPanel() {
     fetchStats();
     scanNetwork();
     const trackInterval = setInterval(fetchTrack, 5000);
-    const networkInterval = setInterval(scanNetwork, 30000);
+    const networkInterval = setInterval(scanNetwork, 300000);
     fetchTrack();
     return () => { clearInterval(trackInterval); clearInterval(networkInterval); };
   }, []);

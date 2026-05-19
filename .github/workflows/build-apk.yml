@@ -28,8 +28,8 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      - name: Capacitor sync
-        run: npx --yes @capacitor/cli sync android
+      - name: Capacitor copy
+        run: npx cap copy android
 
       - name: Build APK
         run: cd android && ./gradlew assembleDebug

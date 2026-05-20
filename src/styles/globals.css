@@ -167,3 +167,4 @@ body {
 
 .animate-pulse-cyan { animation: pulse-cyan 2s ease-in-out infinite; }
 .animate-blink { animation: blink 1s step-end infinite; }
+@viewport { width: 1280px; min-width: 1280px; }

@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import useStore from '../context/store';
@@ -8,6 +8,7 @@ import PlaylistPanel from './PlaylistPanel';
 
 export default function Sidebar({ currentVideo, videoInfo, onGesture, onCameraFrame, onPlaylistSong, onAnnounce }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const { logout } = useStore();
   const [tasks, setTasks] = useState([]);
   const [gestureEnabled, setGestureEnabled] = useState(false);
@@ -22,7 +23,7 @@ export default function Sidebar({ currentVideo, videoInfo, onGesture, onCameraFr
   };
 
   const navItem = (to, icon, label, special) => (
-    <Link to={to} style={{ textDecoration: 'none' }}>
+    <div onClick={() => navigate(to)} style={{ textDecoration: 'none', cursor: 'pointer' }}>
       <div style={{
         padding: '8px 12px', borderRadius: 4,
         display: 'flex', alignItems: 'center', gap: 8,
@@ -41,7 +42,7 @@ export default function Sidebar({ currentVideo, videoInfo, onGesture, onCameraFr
       }}>
         <span>{icon}</span> {label}
       </div>
-    </Link>
+    </div>
   );
 
   return (
@@ -54,8 +55,6 @@ export default function Sidebar({ currentVideo, videoInfo, onGesture, onCameraFr
       position: 'fixed', left: 0, top: 0, zIndex: 150,
       overflowY: 'auto',
     }}>
-
-      {/* Navigation */}
       <div style={{ fontFamily: 'Orbitron', fontSize: 9, color: '#555566', letterSpacing: 2, padding: '0 12px', marginBottom: 4 }}>
         NAVIGATION
       </div>
@@ -71,7 +70,6 @@ export default function Sidebar({ currentVideo, videoInfo, onGesture, onCameraFr
 
       <div style={{ height: 1, background: 'rgba(0,212,255,0.08)', margin: '4px 0' }} />
 
-      {/* Today's Tasks */}
       <div style={{ fontFamily: 'Orbitron', fontSize: 9, color: '#555566', letterSpacing: 2, padding: '0 12px', marginBottom: 4 }}>
         TODAY
       </div>
@@ -87,14 +85,12 @@ export default function Sidebar({ currentVideo, videoInfo, onGesture, onCameraFr
 
       <div style={{ height: 1, background: 'rgba(0,212,255,0.08)', margin: '4px 0' }} />
 
-      {/* YouTube Player */}
       <div style={{ padding: '0 4px' }}>
         <YoutubePlayer videoId={currentVideo} videoInfo={videoInfo} />
       </div>
 
       <div style={{ height: 1, background: 'rgba(0,212,255,0.08)', margin: '4px 0' }} />
 
-      {/* Camera */}
       <div style={{ padding: '0 4px' }}>
         <GestureControl
           enabled={gestureEnabled}
@@ -106,7 +102,6 @@ export default function Sidebar({ currentVideo, videoInfo, onGesture, onCameraFr
 
       <div style={{ height: 1, background: 'rgba(0,212,255,0.08)', margin: '4px 0' }} />
 
-      {/* Playlist */}
       <PlaylistPanel
         onPlaySong={onPlaylistSong}
         currentVideoId={currentVideo}
@@ -115,16 +110,15 @@ export default function Sidebar({ currentVideo, videoInfo, onGesture, onCameraFr
 
       <div style={{ flex: 1 }} />
 
-      {/* Bottom */}
       <div style={{ display: 'flex', gap: 6, padding: '0 8px' }}>
-        <Link to="/settings" style={{ flex: 1 }}>
+        <div onClick={() => navigate('/settings')} style={{ flex: 1 }}>
           <button style={{
             width: '100%', background: 'transparent',
             border: '1px solid rgba(0,212,255,0.15)',
             borderRadius: 4, padding: '8px', color: '#8888aa',
             cursor: 'pointer', fontFamily: 'Rajdhani', fontSize: 12,
           }}>⚙️ Settings</button>
-        </Link>
+        </div>
         <button onClick={logout} style={{
           background: 'transparent',
           border: '1px solid rgba(255,68,68,0.2)',

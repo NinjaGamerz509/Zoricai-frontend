@@ -13,7 +13,6 @@ public class MainActivity extends BridgeActivity {
         WebView webView = getBridge().getWebView();
         WebSettings settings = webView.getSettings();
         settings.setUseWideViewPort(true);
-        settings.setLoadWithOverviewMode(false);
-        settings.setInitialScale(25);
+        settings.setLoadWithOverviewMode(true);
     }
 }

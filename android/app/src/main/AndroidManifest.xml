@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-sdk tools:overrideLibrary="io.ionic.libs.ioncameralib,io.ionic.libs.iongeolocationlib,io.ionic.libs.ionfilesystemlib,io.ionic.libs.ionbluetoothlelib,io.ionic.libs.ionspeechrecognitionlib,io.ionic.libs.ionlocalnotificationslib,io.ionic.libs.ionpushnotificationslib,io.ionic.libs.ionbackgroundrunnerlib,com.google.firebase.messaging" />
+    <uses-sdk tools:overrideLibrary="io.ionic.libs.ioncameralib,io.ionic.libs.iongeolocationlib,io.ionic.libs.ionfilesystemlib,io.ionic.libs.ionbluetoothlelib,io.ionic.libs.ionspeechrecognitionlib,io.ionic.libs.ionlocalnotificationslib,io.ionic.libs.ionpushnotificationslib,io.ionic.libs.ionbackgroundrunnerlib,com.google.firebase.messaging,com.capacitorjs.android_js_engine,androidx.work" />
 
     <application android:usesCleartextTraffic="true"
         android:allowBackup="true"

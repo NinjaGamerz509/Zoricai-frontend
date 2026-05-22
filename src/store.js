@@ -1,31 +1,56 @@
 import { create } from 'zustand';
-import { Preferences } from '@capacitor/preferences';
+
+const getStorage = async (key) => {
+  try {
+    const { Preferences } = await import('@capacitor/preferences');
+    const { value } = await Preferences.get({ key });
+    return value;
+  } catch {
+    return localStorage.getItem(key);
+  }
+};
+
+const setStorage = async (key, value) => {
+  try {
+    const { Preferences } = await import('@capacitor/preferences');
+    await Preferences.set({ key, value });
+  } catch {
+    localStorage.setItem(key, value);
+  }
+};
+
+const removeStorage = async (key) => {
+  try {
+    const { Preferences } = await import('@capacitor/preferences');
+    await Preferences.remove({ key });
+  } catch {
+    localStorage.removeItem(key);
+  }
+};
 
 const useStore = create((set) => ({
   token: null,
   user: null,
 
   loadToken: async () => {
-    try {
-      const { value: token } = await Preferences.get({ key: 'zoric_token' });
-      const { value: user } = await Preferences.get({ key: 'zoric_user' });
-      set({ token, user: user ? JSON.parse(user) : null });
-    } catch {}
+    const token = await getStorage('zoric_token');
+    const userStr = await getStorage('zoric_user');
+    set({ token, user: userStr ? JSON.parse(userStr) : null });
   },
 
   setToken: async (token) => {
-    await Preferences.set({ key: 'zoric_token', value: token });
+    await setStorage('zoric_token', token);
     set({ token });
   },
 
   setUser: async (user) => {
-    await Preferences.set({ key: 'zoric_user', value: JSON.stringify(user) });
+    await setStorage('zoric_user', JSON.stringify(user));
     set({ user });
   },
 
   logout: async () => {
-    await Preferences.remove({ key: 'zoric_token' });
-    await Preferences.remove({ key: 'zoric_user' });
+    await removeStorage('zoric_token');
+    await removeStorage('zoric_user');
     set({ token: null, user: null });
   }
 }));

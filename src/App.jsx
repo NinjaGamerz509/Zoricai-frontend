@@ -1,52 +1,53 @@
-import { useState } from 'react';
-import { HashRouter as BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Landing from './pages/Landing';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Settings from './pages/Settings';
-import Tasks from './pages/Tasks';
-import Logs from './pages/Logs';
-import Analytics from './pages/Analytics';
-import { Journal, Habits, Expenses } from './pages/PersonalPages';
-import BrowserPage from './pages/Browser';
-import Sentinel from './pages/Sentinel';
-import BootAnimation from './components/BootAnimation';
-import GlobalAlert from './components/GlobalAlert';
-import useStore from './context/store';
-import './styles/globals.css';
+import { useEffect, useState } from 'react';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import useStore from './store.js';
+import Login from './pages/Login.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+import Tasks from './pages/Tasks.jsx';
+import Logs from './pages/Logs.jsx';
+import Analytics from './pages/Analytics.jsx';
+import Settings from './pages/Settings.jsx';
+import Browser from './pages/Browser.jsx';
+import Sentinel from './pages/Sentinel.jsx';
+import Personal from './pages/Personal.jsx';
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useStore();
-  return token ? children : <Navigate to="/login" />;
+  return token ? children : <Navigate to="/login" replace />;
 };
 
 export default function App() {
-  const [booted, setBooted] = useState(false);
-  const { token } = useStore();
+  const { token, loadToken } = useStore();
+  const [loading, setLoading] = useState(true);
 
-  // Show boot animation only if logged in
-  if (token && !booted) {
-    return <BootAnimation onComplete={() => setBooted(true)} />;
-  }
+  useEffect(() => {
+    loadToken().finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return (
+    <div style={{
+      minHeight: '100vh', background: '#050510',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      color: '#00d4ff', fontFamily: 'monospace', fontSize: 18, letterSpacing: 4,
+    }}>
+      INITIALIZING ZORIC...
+    </div>
+  );
 
   return (
-    <BrowserRouter>
-      <GlobalAlert />
+    <HashRouter>
       <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={token ? <Navigate to="/dashboard" replace /> : <Login />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         <Route path="/tasks" element={<ProtectedRoute><Tasks /></ProtectedRoute>} />
         <Route path="/logs" element={<ProtectedRoute><Logs /></ProtectedRoute>} />
-        <Route path="/browser" element={<ProtectedRoute><BrowserPage /></ProtectedRoute>} />
-        <Route path="/sentinel" element={<ProtectedRoute><Sentinel /></ProtectedRoute>} />
         <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-        <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />
-        <Route path="/habits" element={<ProtectedRoute><Habits /></ProtectedRoute>} />
-        <Route path="/expenses" element={<ProtectedRoute><Expenses /></ProtectedRoute>} />
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        <Route path="/browser" element={<ProtectedRoute><Browser /></ProtectedRoute>} />
+        <Route path="/sentinel" element={<ProtectedRoute><Sentinel /></ProtectedRoute>} />
+        <Route path="/personal" element={<ProtectedRoute><Personal /></ProtectedRoute>} />
+        <Route path="*" element={<Navigate to={token ? "/dashboard" : "/login"} replace />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
